@@ -11,12 +11,20 @@ def read_msg(offset):
     if response["result"]:
         for i in response["result"]:
 
+            print("Request found")
+
+            try: # If the user is asking for its ID
+                if i["message"]["text"] == "/get_id":
+                    send_message_noreply(i["message"]["from"]["id"], "ID:  " + str(i["message"]["from"]["id"]))
+            except:
+                pass
+
             with open("data.json", "r") as f:
                 data = json.load(f)
             
             if 'message' in i:
                 user_id = str(i["message"]["from"]["id"])
-                if user_id in data:
+                if user_id in data or user_id in admin:
 
                     if 'voice' in i['message'] and type(data[user_id]["current"]) != str:
                         resp_media = requests.get(BOT_URL + '/getFile?file_id=' + i["message"]["voice"]["file_id"]) # https://api.telegram.org/bot<token>/getFile?file_id=<file_id>
@@ -35,13 +43,13 @@ def read_msg(offset):
                         total = round(data[user_id]["jobs"][data[user_id]["current"]]["current_score"] + score, 1)
                         data[user_id]["jobs"][data[user_id]["current"]]["current_score"] = total
 
-                        emoji = " 😍" if score > 6.6 else " 😐" if score > 3.3 else " 😭" if score > 3.3 else " ❗"
+                        emoji = " 😍" if score > 6.6 else " 😐" if score > 3.3 else " 😭" if score > 0.0 else " ❗"
 
                         if data[user_id]["jobs"][data[user_id]["current"]]["current_score"] > data[user_id]["jobs"][data[user_id]["current"]]["target_score"]:
                             send_message(user_id, "Score: " + str(score) + emoji + "\nFinished! 🎉 🎉 🎉 🎉 🎉 Total: " + str(total), i["message"]["message_id"])
                         else:
                             send_message(user_id, "Score: " + str(score) + emoji + "\nTotal: " + str(total), i["message"]["message_id"])
-                            data[user_id]["coins"] = data[user_id]["coins"] + score*len(to_compare)/5000
+                            data[user_id]["coins"] = data[user_id]["coins"] + score*len(to_compare)/4000
 
                     elif 'text' in i['message']:
                         if i['message']['text'] == '/jobs':
@@ -53,12 +61,13 @@ def read_msg(offset):
                                     a["callback_data"] = str(k)
                                     reply_markup.append([a])
 
-                                send_inline(user_id, "====>               List of jobs               <====", reply_markup)
+                                send_inline(user_id, "=====>              List of jobs              <=====", reply_markup)
                             
                         elif i['message']['text'] == '/wallet':
                             if user_id in admin:
-                                reply_markup = [[{'text': '+0.5', 'callback_data': '+0.5'}, {'text': '+1', 'callback_data': '+1'}, {'text': '+2', 'callback_data': '+2'}, {'text': '+5', 'callback_data': '+5'}, {'text': '+10', 'callback_data': '+10'}]]
-                                send_inline(user_id, "Balance:  $ " + str(round(data[student_id]['coins'], 2)), reply_markup) # sends julias balance
+                                for s in data:
+                                    reply_markup = [[{'text':  '+0.5', 'callback_data': s+'+0.5'}, {'text': '+1', 'callback_data': s+'+1'}, {'text': '+2', 'callback_data': s+'+2'}, {'text': '+5', 'callback_data': s+'+5'}, {'text': '+10', 'callback_data': s+'+10'}]]
+                                    send_inline(user_id, "Balance:  $ " + str(round(data[s]['coins'], 2)), reply_markup) # sends julias balance
                             else:
                                 reply_markup = [[{'text': '-0.5', 'callback_data': '-0.5'}, {'text': '-1', 'callback_data': '-1'}, {'text': '-2', 'callback_data': '-2'}, {'text': '-5', 'callback_data': '-5'}, {'text': '-10', 'callback_data': '-10'}]]
                                 send_inline(user_id, "Balance:  $ " + str(round(data[user_id]['coins'], 2)), reply_markup)
@@ -68,17 +77,20 @@ def read_msg(offset):
             
             if 'callback_query' in i:
                 user_id = str(i["callback_query"]["from"]["id"])
-                if user_id in data:
+                if user_id in data or user_id in admin:
 
-                    if i['callback_query']['data'] in ['-0.5', '+0.5', '-1', '+1', '-2', '+2', '-5', '+5', '-10', '+10']:
-                        data[student_id]["coins"] = data[student_id]["coins"] + float(i['callback_query']['data'])
+                    if "+" in i['callback_query']['data']: # add coins (admin)
+                        callback = i['callback_query']['data'].split("+")
+                        data[callback[0]]["coins"] = data[callback[0]]["coins"] + float(callback[1])
+                        for s in data:
+                            reply_markup = [[{'text':  '+0.5', 'callback_data': s+'+0.5'}, {'text': '+1', 'callback_data': s+'+1'}, {'text': '+2', 'callback_data': s+'+2'}, {'text': '+5', 'callback_data': s+'+5'}, {'text': '+10', 'callback_data': s+'+10'}]]
+                            send_inline(user_id, "Balance:  $ " + str(round(data[s]['coins'], 2)), reply_markup) # sends users balance
 
-                        if user_id in admin:
-                            reply_markup = [[{'text': '+0.5', 'callback_data': '+0.5'}, {'text': '+1', 'callback_data': '+1'}, {'text': '+2', 'callback_data': '+2'}, {'text': '+5', 'callback_data': '+5'}, {'text': '+10', 'callback_data': '+10'}]]
-                            send_inline(user_id, "Balance:  $ " + str(round(data[student_id]['coins'], 2)), reply_markup) # sends julias balance
-                        else:
-                            reply_markup = [[{'text': '-0.5', 'callback_data': '-0.5'}, {'text': '-1', 'callback_data': '-1'}, {'text': '-2', 'callback_data': '-2'}, {'text': '-5', 'callback_data': '-5'}, {'text': '-10', 'callback_data': '-10'}]]
-                            send_inline(user_id, "Balance:  $ " + str(round(data[user_id]['coins'], 2)), reply_markup)
+                    elif "-" in i['callback_query']['data']: # rest coins (user)
+                        callback = i['callback_query']['data'].split("-")
+                        data[callback[0]]["coins"] = data[callback[0]]["coins"] - float(callback[1])
+                        reply_markup = [[{'text': '-0.5', 'callback_data': '-0.5'}, {'text': '-1', 'callback_data': '-1'}, {'text': '-2', 'callback_data': '-2'}, {'text': '-5', 'callback_data': '-5'}, {'text': '-10', 'callback_data': '-10'}]]
+                        send_inline(user_id, "Balance:  $ " + str(round(data[user_id]['coins'], 2)), reply_markup)
 
                     elif not user_id in admin: # Options: integer value
                         data[user_id]["current"] = int(i["callback_query"]["data"])
@@ -116,7 +128,7 @@ def set_commands():
     url = BOT_URL + "/setMyCommands"
     headers = {"Content-Type": "application/json"}
     data = {
-        "commands": [{"command": "jobs", "description": "📖"}, {"command": "wallet", "description": "💵"}]
+        "commands": [{"command": "jobs", "description": "📖"}, {"command": "wallet", "description": "💵"}, {"command": "get_id", "description": "Get your ID"}]
         }
     data = json.dumps(data)
     resp = requests.post(url, data=data, headers=headers)
@@ -132,11 +144,10 @@ def compare(text1, text2, dificulty):
 
 ##################################################################################################################################
 
-token = 'BotToken'
+token = 'get_your_token_and_paste_here'
 BOT_URL = 'https://api.telegram.org/bot' + token
 
-sudent_id = "5983337071"
-admin = {'649792299', '316747837'}
+admin = {'get_your_id_and_paste_here'}
 
 model = whisper.load_model("medium")
 set_commands()
@@ -149,3 +160,4 @@ while True:
     except:
         print("Connection error, restarting...")
         time.sleep(2)
+        
