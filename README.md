@@ -39,4 +39,4 @@ Up to 4G of RAM will be used.
 5. *target_score* the score limit, on which more coins will not be added
 6. *difficulty* refers how difficult will be to get a perfect score or easier to get lower, the calculation detail is in the line 143
 
-<iframe width="576" height="1280" src="https://www.youtube.com/watch?v=IKmKPL1Bf8k" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://github.com/procrastinando/Study-languages-using-telegram-and-whisper/raw/main/video.mp4
