@@ -71,7 +71,7 @@ To use the learnbot_azure.py script for speech recognition using Azure Cognitive
 ```
 python learnbot_azure.py
 ```
-To add more jobs to the data.json file using OCR, place the images in the images directory and run the following command in the root directory of the cloned repository:
+To add more jobs to the data.json file using OCR, place the images in the images directory and run the following command in the learnbot directory of the cloned repository:
 ```
 python add_jobs.py
 ```
