@@ -1,0 +1,5 @@
+pytesseract
+Pillow
+requests
+azure-cognitiveservices-speech
+pydub
