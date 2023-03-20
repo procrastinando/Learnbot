@@ -63,13 +63,18 @@ Configure the config.json file in the learnbot directory with the following info
 * model: The size of the Whisper model to use for speech recognition. Available options are tiny, base, small, medium, and large.
 * ex_rate: The exchange rate of successful letters for rewards. For example, if the exchange rate is 10000, the user will receive 0.0001 dollars for each successfully pronounced letter.
 
-#### To use the learnbot_whisper.py script for speech recognition using Whisper, run the following command in the root directory of the cloned repository:
-
-```python learnbot_whisper.py```
+To use the learnbot_whisper.py script for speech recognition using Whisper, run the following command in the root directory of the cloned repository:
+```
+python learnbot_whisper.py
+```
 To use the learnbot_azure.py script for speech recognition using Azure Cognitive Services, run the following command in the root directory of the cloned repository:
-```python learnbot_azure.py```
+```
+python learnbot_azure.py
+```
 To add more jobs to the data.json file using OCR, place the images in the images directory and run the following command in the root directory of the cloned repository:
-```python add_jobs.py```
+```
+python add_jobs.py
+```
 Interact with the bot on Telegram by adding it to a group chat or sending it direct messages. The bot will provide instructions on how to use it for language learning.
 
 https://user-images.githubusercontent.com/74340724/206840669-94e40f2f-2d33-42fe-918a-c504a9161550.mp4
