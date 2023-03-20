@@ -17,13 +17,13 @@ def transcribe_audio(resp_media: str) -> str:
         f.write(response.content)
 
     audio = AudioSegment.from_ogg("learnbot/temp.oga")
-    audio.export("learnbot/temp.wav", format="wav")
+    audio.export("learnbot/temp.mp3", format="mp3")
 
     # Create a speech config
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
 
     # Create an audio config
-    audio_config = speechsdk.AudioConfig(filename='learnbot/temp.wav')
+    audio_config = speechsdk.AudioConfig(filename='learnbot/temp.mp3')
 
     # Create a speech recognizer
     recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
