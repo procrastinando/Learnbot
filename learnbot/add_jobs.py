@@ -32,7 +32,9 @@ data_file = "data.json"
 user = input("Insert user ID: ")
 lang = input("Insert Job name: ")
 target_score = input("Insert target score: ")
+target_score = float(target_score)
 difficulty = input("Insert difficulty: ")
+difficulty = float(difficulty)
 
 list_images = os.listdir(images_path)
 list_images.sort()
