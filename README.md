@@ -35,9 +35,9 @@ Once the bot is created, copy the bot token for use in the Learnbot config.json 
 
 * Clone the repository
 * Open a terminal or command prompt and run the following command: ```sudo apt-get update && sudo apt-get install -y libleptonica-dev tesseract-ocr tesseract-ocr-eng libtesseract-dev ffmpeg```
-> For ubuntu 22 only: ```wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.17_amd64.deb && sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.17_amd64.deb```
 * Next, install the Whisper library by running the following command: ```pip install git+https://github.com/openai/whisper.git```
 * Finally, install the remaining dependencies by running the following command from the Learnbot directory: ```pip install -r learnbot/requirements.txt```
+>> For ubuntu 22 only: ```wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.17_amd64.deb && sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.17_amd64.deb```
 
 #### Hardware Requirements:
 
