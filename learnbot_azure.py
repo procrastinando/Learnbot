@@ -35,7 +35,7 @@ def transcribe_audio(resp_media: str) -> str:
     if result.reason == speechsdk.ResultReason.RecognizedSpeech:
         return result.text
     else:
-        raise Exception(f"Error transcribing audio file: {result.error_details}")
+        return "Not recognizable"
 
 def text_to_speech(text: str, azure_voice):
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
