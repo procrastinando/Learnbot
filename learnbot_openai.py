@@ -18,10 +18,10 @@ def transcribe_audio(resp_media: str) -> str:
         f.write(response.content)
 
     audio = AudioSegment.from_ogg("learnbot/temp.oga")
-    audio.export("learnbot/temp.wav", format="wav")
+    audio.export("learnbot/temp.mp3", format="mp3")
 
     model_id = 'whisper-1'
-    audio_file = open("learnbot/temp.wav", 'rb')
+    audio_file = open("learnbot/temp.mp3", 'rb')
 
     try:
         response_openai = openai.Audio.transcribe(model=model_id, file=audio_file)
