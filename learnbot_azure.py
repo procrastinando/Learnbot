@@ -35,7 +35,7 @@ def transcribe_audio(resp_media: str) -> str:
     if result.reason == speechsdk.ResultReason.RecognizedSpeech:
         return result.text
     else:
-        return "Not recognizable"
+        return "#error"
 
 def text_to_speech(text: str, azure_voice):
     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
@@ -105,25 +105,28 @@ def read_msg(offset):
                         resp_media = requests.get(BOT_URL + '/getFile?file_id=' + i["message"]["voice"]["file_id"]) # https://api.telegram.org/bot<token>/getFile?file_id=<file_id>
                         speech = transcribe_audio(resp_media) # download and transcribe
                         
-                        to_compare = data[user_id]["jobs"][data[user_id]["current"]]["text"]
-                        characters = [',', '.', ':', '?', '!', '¿', '¡', "'", '\n']
-                        for j in characters:
-                            speech = speech.replace(j, '')
-                            to_compare = to_compare.replace(j, '')
-                        print(datetime.datetime.now().strftime("%H:%M:%S") + ": " +speech)
-
-                        score = round(compare(speech, to_compare, data[user_id]["jobs"][data[user_id]["current"]]["difficulty"]) - 1, 1)
-                        print("Score: " + str(score))
-                        total = round(data[user_id]["jobs"][data[user_id]["current"]]["current_score"] + score, 1)
-                        data[user_id]["jobs"][data[user_id]["current"]]["current_score"] = total
-
-                        emoji = " 😍" if score > 6 else " 😐" if score > 3 else " 😭" if score > 0.0 else " ❗"
-
-                        if data[user_id]["jobs"][data[user_id]["current"]]["current_score"] > data[user_id]["jobs"][data[user_id]["current"]]["target_score"]:
-                            send_message(user_id, "Score: " + str(score) + emoji + "\nFinished! 🎉 🎉 🎉 🎉 🎉 Total: " + str(total), i["message"]["message_id"])
+                        if speech == "#error":
+                            send_message(user_id, "Voice recognition error 😥", i["message"]["message_id"])
                         else:
-                            send_message(user_id, "Score: " + str(score) + emoji + "\nTotal: " + str(total), i["message"]["message_id"])
-                            data[user_id]["coins"] = data[user_id]["coins"] + score*len(to_compare)/ float(config["ex_rate"])
+                            to_compare = data[user_id]["jobs"][data[user_id]["current"]]["text"]
+                            characters = [',', '.', ':', '?', '!', '¿', '¡', "'", '\n']
+                            for j in characters:
+                                speech = speech.replace(j, '')
+                                to_compare = to_compare.replace(j, '')
+                            print(datetime.datetime.now().strftime("%H:%M:%S") + ": " +speech)
+
+                            score = round(compare(speech, to_compare, data[user_id]["jobs"][data[user_id]["current"]]["difficulty"]) - 1, 1)
+                            print("Score: " + str(score))
+                            total = round(data[user_id]["jobs"][data[user_id]["current"]]["current_score"] + score, 1)
+                            data[user_id]["jobs"][data[user_id]["current"]]["current_score"] = total
+
+                            emoji = " 😍" if score > 6 else " 😐" if score > 3 else " 😭" if score > 0.0 else " ❗"
+
+                            if data[user_id]["jobs"][data[user_id]["current"]]["current_score"] > data[user_id]["jobs"][data[user_id]["current"]]["target_score"]:
+                                send_message(user_id, "Score: " + str(score) + emoji + "\nFinished! 🎉 🎉 🎉 🎉 🎉 Total: " + str(total), i["message"]["message_id"])
+                            else:
+                                send_message(user_id, "Score: " + str(score) + emoji + "\nTotal: " + str(total), i["message"]["message_id"])
+                                data[user_id]["coins"] = data[user_id]["coins"] + score*len(to_compare)/ float(config["ex_rate"])
 
                     elif 'text' in i['message']:
                         if i['message']['text'] == '/jobs':
