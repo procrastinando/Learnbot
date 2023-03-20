@@ -1,6 +1,6 @@
 # Study-languages-using-telegram-and-whisper
 
-Send an audio to telegram bot, it will reply with a score (from -1 to 10) based in your pronounciation. _data.json_ is used to store the texts to read, the scores and the target scores, addicionally, the bot generates *coins* when the pronounciation is correct to incentivate its use on kids.
+Fully upgraded! v2.0. Send an audio to telegram bot, it will reply with a score (from -1 to 10) based in your pronounciation. _data.json_ is used to store the texts to read, the scores and the target scores, addicionally, the bot generates *coins* when the pronounciation is correct to incentivate its use on kids.
 
 ## FEATURES
 
@@ -8,7 +8,11 @@ Send an audio to telegram bot, it will reply with a score (from -1 to 10) based 
 2. Multiple users can use the bot
 3. Multiple admins can see the _coins balance_ and add more if necesary
 
-## Hardware requirements:
+## AZURE SUBSCRIPTION
+
+You need a 
+
+## Hardware requirements (whisper as a voice recognition):
 
 Up to 4G of RAM will be used.
 
@@ -19,8 +23,9 @@ Up to 4G of RAM will be used.
 
 ### Install dependencies
 
-1. pip install git+https://github.com/openai/whisper.git
-2. pip install difflib
+1. sudo apt-get update && sudo apt-get install -y libleptonica-dev tesseract-ocr tesseract-ocr-eng libtesseract-dev ffmpeg
+2. pip install git+https://github.com/openai/whisper.git (only for use whisper as a voice recognition)
+3. pip install -r requirements.txt
 
 ## Setup
 
