@@ -171,7 +171,7 @@ def read_msg(offset):
                             if tts_result == True:
                                 send_audio(user_id, data[user_id]["jobs"][data[user_id]["current"]]["text"], "learnbot/"+azure_voice+".mp3")
                             else:
-                                send_message_noreply(user_id, "Sorry, I can't speak 😥")
+                                send_message_noreply(user_id, "Sorry, I can't speak 😥\n\n" + data[user_id]["jobs"][data[user_id]["current"]]["text"])
                         
                     with open("learnbot/data.json", "w") as f:
                         json.dump(data, f)
