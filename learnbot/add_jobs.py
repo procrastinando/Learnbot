@@ -12,7 +12,13 @@ def list_files(directory):
 def add_job(user, data_file, new_job):
     with open(data_file, 'r') as f:
         data = json.load(f)
-    data[user]['jobs'].append(new_job)
+    
+    try:
+        data[user]['jobs'].append(new_job)
+    except:
+        data[user] = {"coins": 0.0, "current": 0, "voice": "en-US-ChristopherNeural", "jobs": []}
+        data[user]['jobs'].append(new_job)
+    
     with open(data_file, 'w') as f:
         json.dump(data, f)
 
