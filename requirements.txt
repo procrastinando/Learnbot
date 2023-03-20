@@ -1,6 +1,5 @@
 pytesseract
 Pillow
-whisper
 requests
 azure-cognitiveservices-speech
 pydub
