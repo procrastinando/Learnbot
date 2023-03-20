@@ -1,0 +1,6 @@
+en-GB-BellaNeural (Female)
+en-GB-MaisieNeural (Female, Child)
+en-GB-NoahNeural (Male)
+en-US-AnaNeural (Female, Child)
+en-US-JennyNeural (Female)
+en-US-ChristopherNeural (Male)
