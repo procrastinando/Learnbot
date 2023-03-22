@@ -152,9 +152,9 @@ def read_msg(offset):
 
                     elif "@" in i['callback_query']['data']: # rest coins (user)
                         ammount = i['callback_query']['data'].split("@")
-                        data[ammount[0]]["coins"] = data[ammount[0]]["coins"] - float(ammount[1])
+                        data[user_id]["coins"] = data[user_id]["coins"] - float(ammount[1])
                         reply_markup = [[{'text': '-0.1', 'callback_data': '@0.1'}, {'text': '-0.5', 'callback_data': '@0.5'}, {'text': '-1', 'callback_data': '@1'}, {'text': '-2', 'callback_data': '@2'}, {'text': '-5', 'callback_data': '@5'}, {'text': '-10', 'callback_data': '@10'}]]
-                        send_inline(ammount[0], "Balance:  $ " + str(round(data[ammount[0]]['coins'], 2)), reply_markup)
+                        send_inline(user_id, "Balance:  $ " + str(round(data[user_id]['coins'], 2)), reply_markup)
 
                     elif not user_id in admin: # Options: integer value
                         lista = list_filtered(voices_file, allowed_voices)
